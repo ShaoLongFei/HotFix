@@ -1,5 +1,9 @@
 package com.liuyue.hotfix;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,10 +76,19 @@ public class MainActivity extends AppCompatActivity {
                     fileOutputStream.flush();
                     fileOutputStream.close();
 
-                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "更新完成，请重启 APP", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> new AlertDialog.Builder(MainActivity.this)
+                            .setMessage("更新文件已下载完毕，是否立刻重启应用？")
+                            .setPositiveButton("是", (dialog, which) -> {
+                                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                            })
+                            .setNegativeButton("否", (dialog, which) -> dialog.dismiss())
+                            .show());
                 }
             } catch (Exception e) {
-                runOnUiThread(() -> Toast.makeText(MainActivity.this, "更新 so 失败 "+ e.getMessage(), Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "更新 so 失败 " + e.getMessage(), Toast.LENGTH_SHORT).show());
                 e.printStackTrace();
             }
         }).start();
