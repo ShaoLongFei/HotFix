@@ -5,6 +5,8 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,20 +29,27 @@ public class MainActivity extends AppCompatActivity {
     private static final String SO_URL = "http://qov2cux0b.hn-bkt.clouddn.com/libhotfix.so?e=1679381404&token=QxZugR8TAhI38AiJ_cptTl3RbzLyca3t-AAiH-Hh:Vbvl7UHmHiu6WpHhABd1J-5j69E=";
 
     private ActivityMainBinding binding;
+    private Button button;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        button = findViewById(R.id.button);
+        textView = findViewById(R.id.textView);
 
         String soSavePath = getDir("libs", MODE_PRIVATE).getAbsolutePath() + "/libhotfix.so";
         if (new File(soSavePath).exists()) {
             Toast.makeText(MainActivity.this, "加载新版本 so", Toast.LENGTH_SHORT).show();
             System.load(soSavePath);
+            button.setVisibility(View.GONE);
+            textView.setText("更新成功，目前已经是新版本");
         } else {
             Toast.makeText(MainActivity.this, "加载老版本 so", Toast.LENGTH_SHORT).show();
             System.loadLibrary("hotfix");
+            button.setVisibility(View.VISIBLE);
         }
         TextView tv = binding.sampleText;
         tv.setText(stringFromJNI());

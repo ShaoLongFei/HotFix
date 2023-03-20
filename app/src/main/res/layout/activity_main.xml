@@ -30,7 +30,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="老版本 so 会返回 'Hello from C++ (旧版本)'\n新版本 so 会返回 'Hello from C++'"
+        android:text="当前是老版本，请点击按钮升级"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button"
